@@ -730,7 +730,7 @@ async function loadLeatherTex(leather){
   leatherTexCache.set(leather.id,entry);
   try{
     const im=await loadDataUrlImage(leather.img);
-    const tile=downscale(im,900);
+    const tile=downscale(im,2000);
     if(leatherTexCache.get(leather.id)===entry){entry.tile=tile;baseCache.clear();requestRender();scheduleSim();}
   }catch(e){}
 }
@@ -794,7 +794,7 @@ function colorize(img,W,H,hex,texTile){
   if(texTile){
     try{
       const tc=mkCanvas(W,H),tx=tc.getContext('2d',{willReadFrequently:true});
-      const pat=tx.createPattern(texTile,'repeat');tx.fillStyle=pat;tx.fillRect(0,0,W,H);
+      const k=Math.max(W/texTile.width,H/texTile.height),dw=texTile.width*k,dh=texTile.height*k;tx.drawImage(texTile,(W-dw)/2,(H-dh)/2,dw,dh);
       tp=tx.getImageData(0,0,W,H).data;
     }catch(e){tp=null;}
   }
@@ -1242,7 +1242,7 @@ function drawSim(c){
   x.setTransform(1,0,0,1,0,0);x.globalCompositeOperation='source-over';x.globalAlpha=1;
   x.fillStyle=l.hex;x.fillRect(0,0,W,H);
   const tile=getLeatherTexTile(l);
-  if(tile){try{x.fillStyle=x.createPattern(tile,'repeat');x.fillRect(0,0,W,H);}catch(e){}}
+  if(tile){try{const k=Math.max(W/tile.width,H/tile.height),dw=tile.width*k,dh=tile.height*k;x.drawImage(tile,(W-dw)/2,(H-dh)/2,dw,dh);}catch(e){}}
   else{try{const p=x.createPattern(grainTile(),'repeat');x.save();x.globalAlpha=.9;x.fillStyle=p;x.fillRect(0,0,W,H);x.restore();}catch(e){}}
   const g=x.createRadialGradient(W*.32,H*.2,0,W*.5,H*.55,Math.max(W,H)*.8);
   g.addColorStop(0,'rgba(255,255,255,.11)');g.addColorStop(.55,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.32)');
@@ -1868,7 +1868,7 @@ async function admChange(e){
     const i=+t.dataset.leathertex,f=t.files[0];t.value='';
     if(!FB.active&&dataSize()>MAXDATA){toast('Dữ liệu đã đầy. Hãy xoá bớt mẫu trước khi thêm ảnh.');return;}
     let im;try{im=await loadFileImage(f);}catch(e){toast('Không đọc được ảnh này.');return;}
-    const src=downscale(im,900),l=W.leathers[i];
+    const src=downscale(im,2000),l=W.leathers[i];
     if(FB.active&&l.img&&l.img.indexOf('data:')!==0)AD.toDelete.push('leathers/'+l.id);
     l.img=encodeImg(src,false);
     markDirty();renderAdmBody();return;
