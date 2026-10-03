@@ -662,7 +662,7 @@ function seedDemo(){
   const s=validSides(p)[0];if(!s)return;
   const d=dsg(p.id);
   d.sides[s.id]=[
-    newText(s,{text:'Nguyễn Minh Anh',font:'Great Vibes',size:Math.round(Math.min(s.h*.16,s.w*.09)),y:s.h*.46}),
+    newText(s,{text:'Toàn Davis',font:'Great Vibes',size:Math.round(Math.min(s.h*.16,s.w*.09)),y:s.h*.46}),
     newText(s,{text:'HANDMADE · 2012',font:'Montserrat',size:Math.round(Math.min(s.h*.045,s.w*.025)),ls:22,y:s.h*.62,depth:.85})
   ];
 }
@@ -1232,7 +1232,7 @@ function scheduleSim(){if(!simRaf&&SIMS.size)simRaf=requestAnimationFrame(()=>{s
 function simEls(W,H){
   const b=(S.data.brand||'Davis').toUpperCase();
   return[
-   {id:'sim1',type:'text',x:W/2,y:H*.44,rot:0,text:'Minh Anh',font:'Great Vibes',size:Math.round(H*.27),bold:false,italic:false,align:'center',ls:0,lh:1.15,depth:.93},
+   {id:'sim1',type:'text',x:W/2,y:H*.44,rot:0,text:'Toàn Davis',font:'Great Vibes',size:Math.round(H*.23),bold:false,italic:false,align:'center',ls:0,lh:1.15,depth:.93},
    {id:'sim2',type:'text',x:W/2,y:H*.71,rot:0,text:'HANDMADE · '+b,font:'Montserrat',size:Math.round(H*.064),bold:false,italic:false,align:'center',ls:28,lh:1.15,depth:.86}
   ];
 }
