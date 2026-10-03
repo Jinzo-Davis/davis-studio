@@ -1,0 +1,22 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Thay bằng email admin của anh (viết thường) — giống hệt firestore.rules
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['jinzo.davis@gmail.com'];
+    }
+    // Ảnh sản phẩm, mẫu khắc, màu da, bộ sưu tập, ảnh bìa
+    match /davis-studio/{allPaths=**} {
+      allow read: if true;
+      // Chỉ admin được tải ảnh (tối đa 10MB, phải là ảnh) và được xoá
+      allow write: if isAdmin()
+        && (request.resource == null
+            || (request.resource.size < 10 * 1024 * 1024
+                && request.resource.contentType.matches('image/.*')));
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

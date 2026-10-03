@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Thay bằng email admin của anh (viết thường). Nhiều admin: ['a@gmail.com', 'b@gmail.com']
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['jinzo.davis@gmail.com'];
+    }
+    // Dữ liệu catalog: ai cũng đọc được (trang khách), chỉ admin được ghi
+    match /davisStudio/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    // Mọi thứ khác: khoá
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
